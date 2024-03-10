@@ -8,6 +8,7 @@ use crate::models::Post;
 use self::models::NewPost;
 pub mod schema;
 pub mod models;
+pub mod user_controllers;
 
 pub fn establish_connection()-> PgConnection{
     dotenv().ok();
@@ -34,10 +35,11 @@ pub fn watch_posts(){
     }
 }
 fn main() {
-    // let connection = &mut establish_connection();
+    let connection = &mut establish_connection();
     // create_posts(connection, "eres una puta", "Ok no te");
     // watch_posts();
-    publish_post::update();
+    //publish_post::update(); funcionando
+    user_controllers::create_user(connection, "Admin", "", "mr4303997@gmail.com", "8991151213", "8994508599", false, true);
 }
 
 pub fn create_posts(conn: &mut PgConnection, title: &str, body: &str)-> Post{

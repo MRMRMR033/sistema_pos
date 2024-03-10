@@ -1,4 +1,4 @@
-use crate::{establish_connection, models::Post};
+use crate::{establish_connection, models::{NewPost, Post}};
 use diesel::prelude::*;
 use std::env::args;
 
@@ -18,4 +18,15 @@ pub fn update() {
         .get_result(connection)
         .unwrap();
     println!("Published post {}", post.title);
+}
+
+pub fn create_posts(conn: &mut PgConnection, title: &str, body: &str)-> Post{
+    use crate::schema::posts;
+    let new_post = NewPost {title, body};
+
+    diesel::insert_into(posts::table)
+        .values(&new_post)
+        .returning(Post::as_returning())
+        .get_result(conn)
+        .expect("Error saving new post")
 }
