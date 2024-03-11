@@ -1,7 +1,5 @@
 use crate::models::{NewUser, User};
 use diesel::prelude::*;
-use std::env::args;
-
 
 pub fn create_user(conn: &mut PgConnection, name: &str, lastname: &str, email: &str, cel: &str, house_cel: &str, active: bool, admin:bool )-> User{
     use crate::schema::users;
@@ -14,12 +12,12 @@ pub fn create_user(conn: &mut PgConnection, name: &str, lastname: &str, email: &
         .expect("Error al aguardar el usuario")
 }
 
-pub fn update_user(connection: PgConnection, id_user:i32, new_email: Option<&str>, new_cel: Option<&str>, new_house_cel: Option<&str>, new_active: Option<bool>, new_admin: Option<bool>){
+pub fn update_user(connection: PgConnection, id_user:i32, new_email: Option<String>, new_cel: Option<&str>, new_house_cel: Option<&str>, new_active: Option<bool>, new_admin: Option<bool>){
     use crate::schema::users::dsl::*;
     let mut query = diesel::update(users.filter(id.eq(id_user)));
 
 
-    if let Some(email) = new_email {
+    if let Some(email) = new_email{
         query = query.set(email.eq(email));
     }
 
@@ -39,5 +37,5 @@ pub fn update_user(connection: PgConnection, id_user:i32, new_email: Option<&str
         query = query
     }
 
-    query.execute(&mut connection).expect("Error al actualizar el usuario");
+    query.execute(connection).expect("Error al actualizar el usuario");
 }
