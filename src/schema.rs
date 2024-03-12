@@ -13,12 +13,7 @@ diesel::table! {
     users (id) {
         id -> Int4,
         name -> Varchar,
-        lastname -> Varchar,
-        email -> Varchar,
-        cel -> Varchar,
-        house_cel -> Varchar,
         active -> Bool,
-        admin -> Bool,
     }
 }
 

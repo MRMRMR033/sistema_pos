@@ -39,7 +39,8 @@ fn main() {
     // create_posts(connection, "eres una puta", "Ok no te");
     // watch_posts();
     //publish_post::update(); funcionando
-    user_controllers::create_user(connection, "Admin", "", "mr4303997@gmail.com", "8991151213", "8994508599", false, true);
+    //user_controllers::create_user(connection, "admin", true);
+    user_controllers::update_user(connection, 2,"Prueba", false);
 }
 
 pub fn create_posts(conn: &mut PgConnection, title: &str, body: &str)-> Post{
@@ -52,3 +53,4 @@ pub fn create_posts(conn: &mut PgConnection, title: &str, body: &str)-> Post{
         .get_result(conn)
         .expect("Error saving new post")
 }
+

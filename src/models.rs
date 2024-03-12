@@ -21,28 +21,19 @@ pub struct NewPost<'a> {
 
 use crate::schema::users;
 
-#[derive(Queryable, Selectable)]
+#[derive(Queryable, Selectable, Identifiable, AsChangeset)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct User{
     pub id: i32,
     pub name: String,
-    pub lastname: String,
-    pub email: String,
-    pub cel: String,
-    pub house_cel: String,
     pub active: bool,
-    pub admin: bool
+
 }
 
 #[derive(Insertable)]
 #[diesel(table_name = users)]
 pub struct NewUser<'a>{
     pub name: &'a str,
-    pub lastname: &'a str,
-    pub email: &'a str,
-    pub cel: &'a str,
-    pub house_cel: &'a str,
     pub active: &'a bool,
-    pub admin: &'a bool,
 }
