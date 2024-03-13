@@ -14,6 +14,11 @@ diesel::table! {
         id -> Int4,
         name -> Varchar,
         active -> Bool,
+        pass -> Varchar,
+        phone -> Varchar,
+        email -> Varchar,
+        username -> Varchar,
+        lastname -> Varchar,
     }
 }
 

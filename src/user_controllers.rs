@@ -8,8 +8,8 @@ use diesel;
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 
-pub fn create_user(conn: &mut PgConnection, name: &str, active:bool )-> User{  
-    let new_user = NewUser {name: &name, active: &active};
+pub fn db_create_user(conn: &mut PgConnection, name: &str, lastname: &str, pass: &str, email:&str, phone: &str,username:&str, active:bool )-> User{  
+    let new_user = NewUser {name: &name, active: &active, pass: &pass, phone: &phone, email: &email, username: &username, lastname: &lastname};
     diesel::insert_into(users::table)
         .values(&new_user)
         .returning(User::as_returning())
@@ -23,7 +23,7 @@ pub fn create_user(conn: &mut PgConnection, name: &str, active:bool )-> User{
     segundo parametro el id que deseamos buscar.
     tercer parametro ele
 */
-pub fn update_user(conn: &mut PgConnection, id_finder:i32,  new_name: Option<&str>, status:bool){
+pub fn db_update_user(conn: &mut PgConnection, id_finder:i32,  new_name: Option<&str>, status:bool){
     use crate::schema::users::dsl::*;
 
 
@@ -35,10 +35,8 @@ pub fn update_user(conn: &mut PgConnection, id_finder:i32,  new_name: Option<&st
     println!("{:?}",result)
 }
 
-pub fn get_user_by_id(connection: &mut PgConnection, user_id: i32) -> Option<User> {
+pub fn db_get_user_by_id(connection: &mut PgConnection, user_id: i32) -> Option<User> {
     use crate::schema::users::dsl::*;
-    
-    
     let user = users
         .filter(id.eq(user_id))
         .first::<User>(connection)

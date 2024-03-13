@@ -28,6 +28,11 @@ pub struct User{
     pub id: i32,
     pub name: String,
     pub active: bool,
+    pub pass: String,
+    pub phone: String,
+    pub email: String,
+    pub username: String,
+    pub lastname: String
 
 }
 
@@ -36,4 +41,9 @@ pub struct User{
 pub struct NewUser<'a>{
     pub name: &'a str,
     pub active: &'a bool,
+    pub pass: &'a str,
+    pub phone: &'a str,
+    pub email: &'a str,
+    pub username: &'a str,
+    pub lastname: &'a str,
 }
