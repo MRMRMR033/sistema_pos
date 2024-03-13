@@ -1,7 +1,8 @@
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use std::env::{self};
+use user_controllers::get_user_by_id;
+use std::{env, io::{self, stdin, BufRead, Stdin}};
 
 pub mod publish_post;
 use crate::models::Post;
@@ -37,10 +38,32 @@ pub fn watch_posts(){
 fn main() {
     let connection = &mut establish_connection();
     // create_posts(connection, "eres una puta", "Ok no te");
-    // watch_posts();
+    watch_posts();
     //publish_post::update(); funcionando
     //user_controllers::create_user(connection, "admin", true);
-    user_controllers::update_user(connection, 2,"Prueba", false);
+    //user_controllers::update_user(connection, 2,Some("Prueba"), false);
+
+
+
+    let mut find_user_input = String::new();
+
+    println!("Ingrese el ID del usuario:");
+    io::stdin().lock().read_line(&mut find_user_input).expect("Error al recibir el parámetro");
+    
+    // Eliminar el salto de línea al final y convertir a i32
+    let find_user_id: i32 = match find_user_input.trim().parse() {
+        Ok(id) => id,
+        Err(_) => {
+            println!("Error: Entrada no válida para el ID de usuario.");
+            return;
+        }
+    };
+
+    let user = get_user_by_id(connection, find_user_id);
+    let user_un = user.unwrap();
+    println!("{:?}", user_un);
+
+
 }
 
 pub fn create_posts(conn: &mut PgConnection, title: &str, body: &str)-> Post{
