@@ -1,7 +1,7 @@
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use user_controllers::db_get_user_by_id;
+use user::user_controllers::db_get_user_by_id;
 use std::{env, io::{self, BufRead}};
 
 pub mod publish_post;
@@ -9,9 +9,10 @@ use crate::{general_tools::clear_console, models::Post};
 use self::models::NewPost;
 pub mod schema;
 pub mod models;
-pub mod user_controllers;
 pub mod login;
 pub mod general_tools;
+pub mod products_controllers;
+pub mod user;
 use login as loginuser;
 pub fn establish_connection()-> PgConnection{
     dotenv().ok();
@@ -25,7 +26,7 @@ fn main() {
     clear_console();
     //en este bloque vamos a desarrollar toda la logica del login
     let connection = &mut establish_connection();
-    let mut usuario = "";
+    let usuario;
     'login: loop{
         let mut username = String::new();
         let mut password = String::new();
@@ -36,11 +37,13 @@ fn main() {
         io::stdin().lock().read_line(&mut password).expect("Error al recibir la contrasena");
         clear_console();
         let user = loginuser::login_init(connection, &username.trim());
-        if &user.unwrap().name == &username.trim(){
+        let user_unwrapped = user.unwrap();
+        if &user_unwrapped.username == &username.trim() && &user_unwrapped.pass.to_string() == password.trim(){
+            usuario = user_unwrapped;
             break 'login;
-        };
-        
+        }
     }
+    println!("{}, {}", &usuario.email, &usuario.active);
     //==================================================================================================================
     let mut find_user_input = String::new();
 

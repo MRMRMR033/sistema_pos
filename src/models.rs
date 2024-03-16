@@ -21,6 +21,7 @@ pub struct NewPost<'a> {
 
 use crate::schema::users;
 
+
 #[derive(Debug, Queryable, Selectable, Identifiable, AsChangeset)]
 #[diesel(table_name = crate::schema::users)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
@@ -35,6 +36,7 @@ pub struct User{
     pub lastname: String
 
 }
+
 
 #[derive(Insertable)]
 #[diesel(table_name = users)]

@@ -1,6 +1,3 @@
-use std::env::args;
-use std::fmt::Error;
-
 use crate::schema::users;
 use crate::models::NewUser;
 use crate::models::User;
@@ -16,23 +13,16 @@ pub fn db_create_user(conn: &mut PgConnection, name: &str, lastname: &str, pass:
         .get_result(conn)
         .expect("Error al aguardar el usuario")
 }
-
-
-/*
-    estamos creando una funcion llamada update, donde recibimos como primer parametro una conexion conn.
-    segundo parametro el id que deseamos buscar.
-    tercer parametro ele
-*/
-pub fn db_update_user(conn: &mut PgConnection, id_finder:i32,  new_name: Option<&str>, status:bool){
+//TODO: cuando vayamos a hacer un update a un usuario, primero debemos obtener todos sus datos con la funcion
+// db_get_user_by_id 
+pub fn db_update_user(conn: &mut PgConnection, id_finder:i32,  new_name: &str, new_lastname: &str, new_pass: &str, new_email:&str, new_phone: &str, new_username: &str, new_active: bool){
     use crate::schema::users::dsl::*;
-
-
     let result = diesel::update(users.filter(id.eq(id_finder)))
         //.set(active.eq(status))
         //si queremos actualizar un unico campo es asi pero si queremos actualizar multiples campos, debemos utilizar una tupla.
-        .set((active.eq(status), name.eq(new_name.unwrap_or("default").to_string())))
+        .set((active.eq(new_active), name.eq(new_name), active.eq(new_active), lastname.eq(new_lastname), pass.eq(new_pass), phone.eq(new_phone),email.eq(new_email), username.eq(new_username)))
         .execute(conn);
-    println!("{:?}",result)
+    println!("Update completado: {:?}", result);
 }
 
 pub fn db_get_user_by_id(connection: &mut PgConnection, user_id: i32) -> Option<User> {
@@ -41,6 +31,5 @@ pub fn db_get_user_by_id(connection: &mut PgConnection, user_id: i32) -> Option<
         .filter(id.eq(user_id))
         .first::<User>(connection)
         .ok();
-    
     user
 }

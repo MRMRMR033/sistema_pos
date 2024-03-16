@@ -10,6 +10,20 @@ diesel::table! {
 }
 
 diesel::table! {
+    products (id_product) {
+        id_product -> Int4,
+        name -> Varchar,
+        bar_code -> Varchar,
+        cost_price -> Numeric,
+        sales_price -> Numeric,
+        promotion_price -> Nullable<Numeric>,
+        stock -> Bool,
+        created_at -> Nullable<Timestamp>,
+        updated_at -> Nullable<Timestamp>,
+    }
+}
+
+diesel::table! {
     users (id) {
         id -> Int4,
         name -> Varchar,
@@ -24,5 +38,6 @@ diesel::table! {
 
 diesel::allow_tables_to_appear_in_same_query!(
     posts,
+    products,
     users,
 );
