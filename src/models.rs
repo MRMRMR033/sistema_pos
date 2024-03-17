@@ -79,5 +79,5 @@ pub struct NewProduct<'a>{
     pub sales_price: &'a BigDecimal,
     pub promotion_price: &'a BigDecimal,
     pub stock: bool,
-    pub updated_at: SystemTime,
+    pub updated_at: &'a SystemTime,
 }

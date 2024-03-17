@@ -24,11 +24,19 @@ pub fn db_update_user(conn: &mut PgConnection, id_finder:i32,  update_user: NewU
     println!("Update completado: {:?}", result);
 }
 
-pub fn db_get_user_by_id(connection: &mut PgConnection, user_id: i32) -> Option<User> {
+pub fn db_get_user_by_id(conn: &mut PgConnection, user_id: i32) -> Option<User> {
     use crate::schema::users::dsl::*;
     let user = users
         .filter(id.eq(user_id))
-        .first::<User>(connection)
+        .first::<User>(conn)
         .ok();
     user
+}
+
+pub fn db_delete_user(conn: &mut PgConnection, user_id: i32){
+    use crate::schema::users::dsl::*;
+    diesel::delete(users.filter(id.eq(user_id)))
+    .execute(conn)
+    .expect("Error al eliminar el usuario de la base de datos");
+    println!("db_delete_user ejecutado");
 }

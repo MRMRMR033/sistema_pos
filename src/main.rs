@@ -1,9 +1,10 @@
+use bigdecimal::{BigDecimal, FromPrimitive};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use models::NewUser;
+use models::{NewProduct, NewUser};
 use user::user_controllers;
-use std::env;
+use std::{env, time::SystemTime};
 
 pub mod publish_post;
 pub mod schema;
@@ -34,8 +35,18 @@ fn main() {
         lastname: Some("Ramos")
 
     };
+    let time = SystemTime::now();
+    let producto = NewProduct{
+        name: "Shampoo palmolive",
+        bar_code: "7501",
+        cost_price: &BigDecimal::from_f64(19.00).unwrap(),
+        sales_price: &BigDecimal::from_f64(22.00).unwrap(),
+        promotion_price: &BigDecimal::from_f64(21.00).unwrap(),
+        stock: true,
+        updated_at: &time,
+    };
 
-    user_controllers::db_create_user(&mut conn, usurio);
+    products_controllers::db_update_product(&mut conn, 1, producto)
 
 
 }
