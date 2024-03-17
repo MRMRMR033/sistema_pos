@@ -3,7 +3,7 @@ use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use models::{NewProduct, NewUser};
-use user::user_controllers;
+use controllers::user_controllers;
 use std::{env, time::SystemTime};
 
 pub mod publish_post;
@@ -11,8 +11,7 @@ pub mod schema;
 pub mod models;
 pub mod login;
 pub mod general_tools;
-pub mod products_controllers;
-pub mod user;
+pub mod controllers;
 
 pub fn establish_connection()-> PgConnection{
     dotenv().ok();
@@ -44,9 +43,10 @@ fn main() {
         promotion_price: &BigDecimal::from_f64(21.00).unwrap(),
         stock: true,
         updated_at: &time,
+        quantity: &BigDecimal::from_f64(1.00).unwrap()
     };
 
-    products_controllers::db_update_product(&mut conn, 1, producto)
+    controllers::products_controllers::db_create_product(&mut conn, producto);
 
 
 }

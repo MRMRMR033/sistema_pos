@@ -15,6 +15,7 @@ pub struct Post {
     pub published: bool,
 }
 
+use crate::schema::cash_inflow;
 use crate::schema::posts;
 
 #[derive(Insertable)]
@@ -67,7 +68,8 @@ pub struct Product{
     pub promotion_price: Option<BigDecimal>,
     stock: bool,
     created_at: Option<SystemTime>,
-    updated_at: Option<SystemTime>
+    updated_at: Option<SystemTime>,
+    quantity: BigDecimal,
 }
 
 #[derive(Insertable, AsChangeset)]
@@ -80,4 +82,32 @@ pub struct NewProduct<'a>{
     pub promotion_price: &'a BigDecimal,
     pub stock: bool,
     pub updated_at: &'a SystemTime,
+    pub quantity: &'a BigDecimal
+}
+
+#[derive(Insertable, AsChangeset)]
+#[diesel(table_name = products)]
+pub struct UpdateProduct<'a>{
+    pub quantity: &'a BigDecimal
+}
+
+#[derive(Debug, Queryable, Selectable, SqlType)]
+#[diesel(table_name = crate::schema::cash_inflow)]
+#[diesel(check_for_backend(diesel::pg::Pg))]
+pub struct CashInflow{
+    pub inflow_id: i32,
+    pub amount: Option<BigDecimal>,
+    pub description: Option<String>,
+    pub user_id: Option<i32>,
+    pub created_at: Option<SystemTime>
+}
+
+#[derive(Insertable, AsChangeset)]
+#[diesel(table_name = cash_inflow)]
+pub struct NewCashInflow<'a>{
+    pub amount: &'a BigDecimal,
+    pub description: &'a String,
+    pub user_id: i32,
+    pub created_at: SystemTime
+
 }

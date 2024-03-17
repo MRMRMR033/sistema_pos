@@ -1,0 +1,3 @@
+-- Your SQL goes here
+ALTER TABLE cash_inflow
+ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
