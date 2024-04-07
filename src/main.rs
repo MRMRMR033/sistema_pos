@@ -2,16 +2,17 @@ use bigdecimal::{BigDecimal, FromPrimitive};
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
+use iced::{Application, Settings};
 use models::{NewProduct, NewUser};
-use controllers::user_controllers;
 use std::{env, time::SystemTime};
 
-pub mod publish_post;
+pub mod views;
 pub mod schema;
 pub mod models;
 pub mod login;
 pub mod general_tools;
 pub mod controllers;
+use views::view_login;
 
 pub fn establish_connection()-> PgConnection{
     dotenv().ok();
@@ -21,33 +22,6 @@ pub fn establish_connection()-> PgConnection{
 }
 
 fn main() {
-    
     let mut conn = establish_connection();
-    //==================================================================================================================
-    let usurio = NewUser{
-        name: Some("admin"),
-        active: Some(&true),
-        pass: Some("12345"),
-        phone: Some("2030405060"),
-        email: None,
-        username: Some("admin"),
-        lastname: Some("Ramos")
-
-    };
-    let time = SystemTime::now();
-    let producto = NewProduct{
-        name: "Shampoo palmolive",
-        bar_code: "7501",
-        cost_price: &BigDecimal::from_f64(19.00).unwrap(),
-        sales_price: &BigDecimal::from_f64(22.00).unwrap(),
-        promotion_price: &BigDecimal::from_f64(21.00).unwrap(),
-        stock: true,
-        updated_at: &time,
-        quantity: &BigDecimal::from_f64(1.00).unwrap()
-    };
-
-    controllers::products_controllers::db_create_product(&mut conn, producto);
-
-
+    view_login::main();
 }
-
